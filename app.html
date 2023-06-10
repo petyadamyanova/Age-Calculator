@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Web App Firebase</title>
+  <title>Age Calculator</title>
   <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
@@ -24,18 +24,41 @@
       color: white;
       padding: 10px 20px;
       border: none;
-      cursor: pointer;
+      cursor: pointer; 
     }
 
     button:hover {
       background-color: #45a049;
     }
+
+    .button-container {
+      margin-bottom: 10px;
+    }
   </style>
 
 </head>
 <body>
-  <h1>Web App с Firebase</h1>
-  <button id="myButton">Натисни ме</button>
+  <h1>Age Calculator</h1>
+
+  <div>
+    <label for="birthdate">Въведете рожденна дата:</label>
+    <input type="date" id="birthdate">
+  </div>
+
+  <div class="button-container"> 
+    <button id="calculateButton">Изминали дни от раждане</button>
+  </div>
+
+  <div class="button-container"> 
+    <button id="remainingDaysButton">Оставащи дни до рождения ден</button>
+  </div>
+
+  <div class="button-container"> 
+    <button id="dayOfWeekButton">Ден от седмицата на раждане</button>    
+  </div>
+
+
+  <p id="result"></p>
 
   <script>
     // Конфигуриране на връзката с Firebase
@@ -51,21 +74,50 @@
     };
     firebase.initializeApp(firebaseConfig);
 
-    // Извличане на референция към базата данни
     var database = firebase.database();
 
-    // Получаване на референция към бутона
-    var button = document.getElementById("myButton");
 
-    // При натискане на бутона
-    button.addEventListener("click", function() {
-      // Изпращане на съобщение към базата данни
-      database.ref("messages").push().set({
-        text: "zdr, kpr"
-      });
-      var currentDate = new Date().toLocaleDateString();
-      alert("Днешната дата е: " + currentDate);
+    var birthdateInput = document.getElementById("birthdate");
+    var calculateButton = document.getElementById("calculateButton");
+    var remainingDaysButton = document.getElementById("remainingDaysButton");
+    var dayOfWeekButton = document.getElementById("dayOfWeekButton");
+    var resultElement = document.getElementById("result");
+
+    calculateButton.addEventListener("click", function() {
+        var birthdate = new Date(birthdateInput.value);
+
+        var today = new Date();
+
+        var timeDiff = Math.abs(today.getTime() - birthdate.getTime());
+        var daysPassed = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+        resultElement.textContent = "Минали са " + daysPassed + " дни от вашата рожденна дата.";
+
     });
+
+    remainingDaysButton.addEventListener("click", function() {
+        var birthdate = new Date(birthdateInput.value);
+
+        var today = new Date();
+
+        var nextBirthday = new Date(today.getFullYear(), birthdate.getMonth(), birthdate.getDate());
+        
+        if (nextBirthday < today) {
+            nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+        }
+        var remainingDays = Math.ceil((nextBirthday - today) / (1000 * 3600 * 24));
+
+        resultElement.textContent = "Остават " + remainingDays + " дни до вашия рожден ден.";
+    });
+
+    dayOfWeekButton.addEventListener("click", function() {
+        var birthdate = new Date(birthdateInput.value);
+
+        var dayOfWeek = birthdate.toLocaleString('bg-BG', { weekday: 'long' });
+
+        resultElement.textContent = "Родени сте през " + dayOfWeek;
+    });
+
   </script>
 </body>
 </html>
