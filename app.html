@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Web App Firebase</title>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
+
+    <style>
+    body {
+      background-color: #f1f1f1;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+
+</head>
+<body>
+  <h1>Web App с Firebase</h1>
+  <button id="myButton">Натисни ме</button>
+
+  <script>
+    // Конфигуриране на връзката с Firebase
+    var firebaseConfig = {
+        apiKey: "AIzaSyDfPz--XZJwFyTO4d7cJ2H_QB01RS_KJZk",
+        authDomain: "webapp-2023.firebaseapp.com",
+        databaseURL: "https://webapp-2023-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "webapp-2023",
+        storageBucket: "webapp-2023.appspot.com",
+        messagingSenderId: "399745359693",
+        appId: "1:399745359693:web:ca9b1f6626092e6a97e104",
+        measurementId: "G-RNLY4385WF"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    // Извличане на референция към базата данни
+    var database = firebase.database();
+
+    // Получаване на референция към бутона
+    var button = document.getElementById("myButton");
+
+    // При натискане на бутона
+    button.addEventListener("click", function() {
+      // Изпращане на съобщение към базата данни
+      database.ref("messages").push().set({
+        text: "zdr, kpr"
+      });
+      var currentDate = new Date().toLocaleDateString();
+      alert("Днешната дата е: " + currentDate);
+    });
+  </script>
+</body>
+</html>
